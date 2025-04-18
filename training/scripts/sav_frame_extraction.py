@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import tqdm
+import re
 
 def get_args_parser():
     p = argparse.ArgumentParser(
@@ -22,6 +23,8 @@ def get_args_parser():
                    help="Directory that contains SA‑V videos (recurses one level)")
     p.add_argument("--sav-frame-sample-rate", type=int, default=4,
                    help="Keep every N‑th frame")
+    p.add_argument("--range", type=str, required=True,
+                   help="Range of SAV videos to extract [i,j)")
 
     # OUTPUT
     p.add_argument("--output-dir", type=str, required=True,
@@ -63,6 +66,8 @@ def process_single_video(video_path: str, sample_rate: int, save_root: str):
 
 if __name__ == "__main__":
     args = get_args_parser().parse_args()
+    start_idx, end_idx = args.range.split(',')
+    start_idx, end_idx = int(start_idx), int(end_idx)
 
     mp4_files = sorted([str(p) for p in Path(args.sav_vid_dir).glob("*/*.mp4")])
     if not mp4_files:
@@ -73,7 +78,7 @@ if __name__ == "__main__":
     with ProcessPoolExecutor(max_workers=args.n_jobs) as pool:
         futures = [
             pool.submit(process_single_video, vid, args.sav_frame_sample_rate, args.output_dir)
-            for vid in mp4_files
+            for vid in mp4_files if start_idx <= int(re.findall(r"\d+", vid)[-2]) < end_idx
         ]
 
         for _ in tqdm.tqdm(as_completed(futures), total=len(futures), unit="video"):
