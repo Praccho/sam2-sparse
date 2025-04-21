@@ -4,7 +4,7 @@ scratch:
   resolution: 1024
   train_batch_size: 4
   num_train_workers: 10
-  num_frames: 2
+  num_frames: 4
   max_num_objects: 3
   base_lr: 5.0e-6
   vision_lr: 3.0e-06
@@ -13,8 +13,8 @@ scratch:
 
 dataset:
   # PATHS to Dataset
-  img_folder: ../data/datasets/sam2/sav_frames/sav_train  # PATH to MOSE JPEGImages folder
-  gt_folder: ../data/datasets/sam2/sav/sav_train_jsons  # PATH to MOSE Annotations folder
+  img_folder: /home/exouser/remote_data/data/sam2/sav_train_frames # PATH to MOSE JPEGImages folder
+  gt_folder: /home/exouser/remote_data/data/sam2/sav_train # PATH to MOSE Annotations folder
   file_list_txt: null # Optional PATH to filelist containing a subset of videos to be used for training
   multiplier: 2
 
@@ -202,9 +202,10 @@ trainer:
                 gt_folder: ${dataset.gt_folder}
                 file_list_txt: ${dataset.file_list_txt}
               sampler:
-                _target_: training.dataset.vos_sampler.SparseSamplerV2
+                _target_: training.dataset.vos_sampler.SparseSampler
                 num_frames: ${scratch.num_frames}
                 max_num_objects: ${scratch.max_num_objects}
+                random_permute: True
               multiplier: ${dataset.multiplier}
       shuffle: True
       num_workers: ${scratch.num_train_workers}

@@ -13,8 +13,8 @@ scratch:
 
 dataset:
   # PATHS to Dataset
-  img_folder: ~/remote_data/data/sam2/sav_train # PATH to MOSE JPEGImages folder
-  gt_folder: ../data/datasets/sam2/sav/sav_train_jsons  # PATH to MOSE Annotations folder
+  img_folder: /home/exouser/remote_data/data/sam2/sav_train_frames # PATH to MOSE JPEGImages folder
+  gt_folder: /home/exouser/remote_data/data/sam2/sav_train # PATH to MOSE Annotations folder
   file_list_txt: null # Optional PATH to filelist containing a subset of videos to be used for training
   multiplier: 2
 
