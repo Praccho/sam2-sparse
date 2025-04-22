@@ -1,6 +1,6 @@
 scratch:
   resolution: 1024
-  train_batch_size: 4
+  train_batch_size: 3
   num_train_workers: 10
   num_frames: 4
   max_num_objects: 3
@@ -187,7 +187,7 @@ trainer:
       _target_: training.dataset.sam2_datasets.TorchTrainMixedDataset
       phases_per_epoch: 1
       batch_sizes:
-      - 4
+      - 3
       datasets:
       - _target_: training.dataset.utils.RepeatFactorWrapper
         dataset:
